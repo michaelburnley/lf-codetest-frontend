@@ -2,6 +2,10 @@ import React, { Component } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleRight, faAngleLeft } from '@fortawesome/free-solid-svg-icons';
 
+// Stateless Components
+
+// Slide
+// Handles slide movement and renders textblocks/images
 const Slide = ({ data, pauseSlides, translate }) => {  
   const styles = { 
     transform: `translateX(-${translate}%`
@@ -14,6 +18,14 @@ const Slide = ({ data, pauseSlides, translate }) => {
   )
 }
 
+// Timer
+// Renders time change
+const Timer = ({ timeLeft }) => (
+  <div>Time to Slide Change: {timeLeft / 1000}s</div>
+)
+
+// TextBlocks
+// Renders text that sits within the Slide component
 const TextBlocks = ({ data: { title, subtitle }}) => (
     <div className="text-blocks">
       <div className="title">{title}</div>
@@ -21,14 +33,19 @@ const TextBlocks = ({ data: { title, subtitle }}) => (
     </div>
   )
 
-const SlideIndicator = ({ onClick, image, classes }) => {
+// SlideIndicator
+// Renders thumbnails of images and attaches click handler for slide selection
+const SlideIndicator = ({ onClick, data: { image, title }, classes }) => {
   return(
     <div className={classes} onClick={onClick}>
-      <img className="thumbnail" src={image} alt="thumbnail" />
+      <img className="thumbnail" src={image} alt={title} />
     </div>
   )
 }
 
+// Navigation
+// Renders navigation arrows through FontAwesome component and attaches
+// click handler for slide movement
 const Navigation = ({ changeSlide, text, icon }) => {
   return(
     <div className={text}>
@@ -37,16 +54,20 @@ const Navigation = ({ changeSlide, text, icon }) => {
   )
 }
 
+// Stateful Components
 
+// Carousel
+// Handles all functions for stateless components
+// Images are currently stored in `public` folder and stored in a state array
 class Carousel extends Component {
   constructor() {
     super();
     this.state = {
-      slide: 0,
-      interval: 5000,
-      timeLeft: 5000,
-      paused: false,
-      translate: 0,
+      slide: 0,       // current slide
+      interval: 5000, // time between slides
+      timeLeft: 5000, // countdown timer
+      paused: false,  // flag for hover-over pause
+      translate: 0,   // movement in percentage for slides 
       images: [
         {
           image: "/slide1.jpg",
@@ -65,6 +86,8 @@ class Carousel extends Component {
         },
       ]
     };
+
+    // Binding all class methods for later use
     this.nextSlide = this.nextSlide.bind(this);
     this.prevSlide = this.prevSlide.bind(this);
     this.pauseSlides = this.pauseSlides.bind(this);
@@ -74,10 +97,12 @@ class Carousel extends Component {
     this.restartTimers = this.restartTimers.bind(this);
   }
 
+  // Starts timer as soon as component loads
   componentDidMount() {
     this.timer();
   }
 
+  // Attaches two interval timers to `this` keyword
   timer() {
     this.sliderInterval = setInterval(() => {
       this.nextSlide();
@@ -87,17 +112,20 @@ class Carousel extends Component {
     }, 1000);
   }
 
+  // Removes timers and resets `timeLeft` variable
   clearTimers() {
     clearInterval(this.sliderInterval);
     clearInterval(this.countdown);
     this.setState({ timeLeft: this.state.interval });
   }
 
+  // Helper function for running both above methods
   restartTimers() {
     this.clearTimers();
     this.timer();
   }
 
+  // Checks `paused` flag and sets timers accordingly
   pauseSlides() {
     if(!this.state.paused) {
       this.clearTimers();
@@ -107,6 +135,9 @@ class Carousel extends Component {
     this.setState({ paused: !this.state.paused });
   }
 
+  // nextSlide and prevSlide
+  // Resets timers and performs necessary `Slide` calculations
+  // Local state used to limit `setState` calls
   nextSlide() {
     this.restartTimers();
     let state = {
@@ -127,6 +158,7 @@ class Carousel extends Component {
     this.setState(state);
   }
 
+  // Simple slide translation calculation for SlideIndicator
   goToSlide(slideNumber) {
     this.restartTimers();
     let state = { 
@@ -139,7 +171,8 @@ class Carousel extends Component {
   render() {
     return(
       <div className="wrapper">
-        <div>Time to Change: {this.state.timeLeft / 1000}s</div>
+        <Timer 
+          timeLeft={this.state.timeLeft} />
         <div id="navigation">
           <Navigation 
             changeSlide={this.prevSlide} 
@@ -167,9 +200,8 @@ class Carousel extends Component {
           {
             this.state.images.map((data, i) => (
               <SlideIndicator
-                current_slide={this.state.slide}
                 classes={ this.state.slide === i ? "indicator active" : "indicator" } 
-                image={data.image}
+                data={data}
                 key={i}
                 onClick={e => this.goToSlide(i)} />
             ))
