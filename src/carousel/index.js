@@ -84,7 +84,7 @@ class Carousel extends Component {
           title: "Third Slide",
           subtitle: "I am a sentence below the title.",
         },
-      ]
+      ] // image data array
     };
 
     // Binding all class methods for later use
