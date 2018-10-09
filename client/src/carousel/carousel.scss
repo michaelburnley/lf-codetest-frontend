@@ -1,23 +1,40 @@
-.App {
-  text-align: center;
-}
-
-.wrapper {
-  overflow: hidden;
-  position: relative;
-}
-
 .slide {
   flex: 0 0 100%;
   flex-wrap: wrap;
   width: 100%;
   transition: transform 2s;
   position: relative;
+
+  img {
+    min-width: 100%;
+    width: 50%;
+  }
 }
 
-.slide img {
-  min-width: 100%;
-  width: 50%;
+#navigation {
+  width:100%;
+  position: absolute;
+  top: 40%;
+  
+  .prev, .next {
+    position: absolute;
+    z-index: 1;
+    font-size: 50px;
+  }
+
+  .prev {
+    left: 0;
+  }
+
+  .next {
+    right: 0;
+  }
+
+}
+
+.wrapper {
+  overflow: hidden;
+  position: relative;
 }
 
 .text-blocks {
@@ -35,26 +52,6 @@
 
 .subtitle {
   font-size: 35px;
-}
-
-div#navigation {
-  width:100%;
-  position: absolute;
-  top: 40%;
-}
-
-div#navigation .prev, .next {
-  position: absolute;
-  z-index: 1;
-  font-size: 50px;
-}
-
-.prev {
-  left: 0;
-}
-
-.next {
-  right: 0;
 }
 
 #indicatorWrapper {

@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faAngleRight, faAngleLeft } from '@fortawesome/free-solid-svg-icons';
 
 const Slide = ({ data, pauseSlides, translate }) => {  
   const styles = { 
-    transform: `translateX(-${translate}%`,
+    transform: `translateX(-${translate}%`
   };
   return (
     <div onMouseOver={pauseSlides} onMouseLeave={pauseSlides} className="slide" style={styles}>
@@ -19,19 +21,18 @@ const TextBlocks = ({ data: { title, subtitle }}) => (
     </div>
   )
 
-const SlideIndicator = ({ current_slide, timer, onClick }) => {
+const SlideIndicator = ({ onClick, image, classes }) => {
   return(
-    <div id="indicator" onClick={onClick}>
-      <div>Current Slide: {current_slide + 1}</div>
-      <div>Time to Change: {timer / 1000}s</div>
+    <div className={classes} onClick={onClick}>
+      <img className="thumbnail" src={image} alt="thumbnail" />
     </div>
   )
 }
 
-const Navigation = ({ changeSlide, text }) => {
+const Navigation = ({ changeSlide, text, icon }) => {
   return(
     <div className={text}>
-      <div onClick={changeSlide}>{text}</div>
+      <FontAwesomeIcon icon={icon} onClick={changeSlide} />
     </div>
   )
 }
@@ -138,23 +139,17 @@ class Carousel extends Component {
   render() {
     return(
       <div className="wrapper">
+        <div>Time to Change: {this.state.timeLeft / 1000}s</div>
         <div id="navigation">
           <Navigation 
-            changeSlide={this.nextSlide} 
-            text="next" />
-          <Navigation 
             changeSlide={this.prevSlide} 
-            text="prev" />
+            text="prev"
+            icon={faAngleLeft} />
+          <Navigation 
+            changeSlide={this.nextSlide} 
+            text="next"
+            icon={faAngleRight} />
         </div>
-        {
-          this.state.images.map((data, i) => (
-            <SlideIndicator
-              current_slide={this.state.slide} 
-              key={i}
-              timer={this.state.timeLeft}
-              onClick={e => this.goToSlide(i)} />
-          ))
-        }
         <div id="slideWrapper" style={{
           display: 'inline-flex'
         }}>
@@ -165,6 +160,18 @@ class Carousel extends Component {
                 pauseSlides={this.pauseSlides}
                 translate={this.state.translate}
                 key={i} />
+            ))
+          }
+        </div>
+        <div id="indicatorWrapper">
+          {
+            this.state.images.map((data, i) => (
+              <SlideIndicator
+                current_slide={this.state.slide}
+                classes={ this.state.slide === i ? "indicator active" : "indicator" } 
+                image={data.image}
+                key={i}
+                onClick={e => this.goToSlide(i)} />
             ))
           }
         </div>
