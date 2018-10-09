@@ -107,9 +107,9 @@ class Carousel extends Component {
 
   // Removes timers and resets `timeLeft` variable
   clearTimers = () => {
+    this.setState({ timeLeft: this.state.interval });
     clearInterval(this.sliderInterval);
     clearInterval(this.countdown);
-    this.setState({ timeLeft: this.state.interval });
   }
 
   // Helper function for running both above methods

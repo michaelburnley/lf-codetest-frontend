@@ -1,5 +1,6 @@
 'use strict';
 
+const firebase = require("firebase/app");
 const path = require('path');
 const webpack = require('webpack');
 const PnpWebpackPlugin = require('pnp-webpack-plugin');
