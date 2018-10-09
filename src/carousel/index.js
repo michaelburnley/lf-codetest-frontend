@@ -86,24 +86,15 @@ class Carousel extends Component {
         },
       ] // image data array
     };
-
-    // Binding all class methods for later use
-    this.nextSlide = this.nextSlide.bind(this);
-    this.prevSlide = this.prevSlide.bind(this);
-    this.pauseSlides = this.pauseSlides.bind(this);
-    this.goToSlide = this.goToSlide.bind(this);
-    this.timer = this.timer.bind(this);
-    this.clearTimers = this.clearTimers.bind(this);
-    this.restartTimers = this.restartTimers.bind(this);
   }
 
   // Starts timer as soon as component loads
-  componentDidMount() {
+  componentDidMount = () => {
     this.timer();
   }
 
   // Attaches two interval timers to `this` keyword
-  timer() {
+  timer = () => {
     this.sliderInterval = setInterval(() => {
       this.nextSlide();
     }, this.state.interval);
@@ -113,20 +104,20 @@ class Carousel extends Component {
   }
 
   // Removes timers and resets `timeLeft` variable
-  clearTimers() {
+  clearTimers = () => {
     clearInterval(this.sliderInterval);
     clearInterval(this.countdown);
     this.setState({ timeLeft: this.state.interval });
   }
 
   // Helper function for running both above methods
-  restartTimers() {
+  restartTimers = () => {
     this.clearTimers();
     this.timer();
   }
 
   // Checks `paused` flag and sets timers accordingly
-  pauseSlides() {
+  pauseSlides = () => {
     if(!this.state.paused) {
       this.clearTimers();
     } else {
@@ -138,7 +129,7 @@ class Carousel extends Component {
   // nextSlide and prevSlide
   // Resets timers and performs necessary `Slide` calculations
   // Local state used to limit `setState` calls
-  nextSlide() {
+  nextSlide = () => {
     this.restartTimers();
     let state = {
       slide: this.state.slide + 1,
@@ -148,7 +139,7 @@ class Carousel extends Component {
     this.setState(state);
   }
 
-  prevSlide() {
+  prevSlide = () => {
     this.restartTimers();
     let state = {
       slide: this.state.slide - 1,
@@ -159,7 +150,7 @@ class Carousel extends Component {
   }
 
   // Simple slide translation calculation for SlideIndicator
-  goToSlide(slideNumber) {
+  goToSlide = (slideNumber) => {
     this.restartTimers();
     let state = { 
       slide: slideNumber,
