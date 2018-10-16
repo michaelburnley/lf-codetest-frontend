@@ -10,7 +10,7 @@ import './carousel.scss';
 // Handles slide movement and renders textblocks/images
 const Slide = ({ data, pauseSlides, translate }) => {  
   const styles = { 
-    transform: `translateX(-${translate}%`
+    left: `-${translate}%`
   };
   return (
     <div onMouseOver={pauseSlides} onMouseLeave={pauseSlides} className="slide" style={styles}>
@@ -20,7 +20,7 @@ const Slide = ({ data, pauseSlides, translate }) => {
   )
 }
 
-// Timer
+// Timer  
 // Renders time change
 const Timer = ({ timeLeft }) => (
   <div>Time to Slide Change: {timeLeft / 1000}s</div>
@@ -69,7 +69,7 @@ class Carousel extends Component {
       interval: 5000, // time between slides
       timeLeft: 5000, // countdown timer
       paused: false,  // flag for hover-over pause
-      translate: 0,   // movement in percentage for slides 
+      translate: 100,   // movement in percentage for slides 
       images: [
         {
           image: "/slide1.jpg",
@@ -88,6 +88,7 @@ class Carousel extends Component {
         },
       ] // image data array
     };
+    this.original_arr = this.state.images.slice();
   }
 
   // Starts timer as soon as component loads
@@ -99,6 +100,7 @@ class Carousel extends Component {
   timer = () => {
     this.sliderInterval = setInterval(() => {
       this.nextSlide();
+      // this.setState({ translate: -100 })
     }, this.state.interval);
     this.countdown = setInterval(() => {
       this.setState({ timeLeft: this.state.timeLeft - 1000})
@@ -133,21 +135,31 @@ class Carousel extends Component {
   // Local state used to limit `setState` calls
   nextSlide = () => {
     this.restartTimers();
+    let [first, ...rest] = this.state.images;
+    let images = [...rest, first];
     let state = {
       slide: this.state.slide + 1,
+      images: images,
       translate: this.state.translate
     };
-    state.slide < this.state.images.length ? state.translate += 100 : state.slide = state.translate = 0;
+
+    // state.slide === 0 ? state.translate = -100 : state.translate = this.state.translate * this.state.slide;
+    state.slide < images.length ? console.log("test") : state.slide = 0; 
+
     this.setState(state);
   }
 
   prevSlide = () => {
     this.restartTimers();
+    let last = this.state.images.slice(-1);
+    let rest = this.state.images.slice(0, -1);
+    let images = [...last, ...rest];
     let state = {
       slide: this.state.slide - 1,
-      translate: this.state.translate
+      images: images,
+      // translate: 100
     }
-    state.translate === 0 && state.slide < 0 ? state = { translate: 200, slide: this.state.images.length -1} : state.translate -= 100;
+    state.slide < 0 ? state.slide = state.images.length -1 : console.log("test");
     this.setState(state);
   }
 
@@ -191,7 +203,7 @@ class Carousel extends Component {
         </div>
         <div id="indicatorWrapper">
           {
-            this.state.images.map((data, i) => (
+            this.original_arr.map((data, i) => (
               <SlideIndicator
                 classes={ this.state.slide === i ? "indicator active" : "indicator" } 
                 data={data}

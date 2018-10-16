@@ -16,6 +16,16 @@ const ManifestPlugin = require('webpack-manifest-plugin');
 const getCacheIdentifier = require('react-dev-utils/getCacheIdentifier');
 const ModuleNotFoundPlugin = require('react-dev-utils/ModuleNotFoundPlugin');
 
+var config = {
+  apiKey: "AIzaSyCNWTjJTwfr2qDwt0j2Vi-pwJGA-TshRH0",
+  authDomain: "lf-codetest-frontend.firebaseapp.com",
+  databaseURL: "https://lf-codetest-frontend.firebaseio.com",
+  projectId: "lf-codetest-frontend",
+  storageBucket: "",
+  messagingSenderId: "524177910279"
+};
+firebase.initializeApp(config);
+
 // Webpack uses `publicPath` to determine where the app is being served from.
 // In development, we always serve from the root. This makes config easier.
 const publicPath = '/';
