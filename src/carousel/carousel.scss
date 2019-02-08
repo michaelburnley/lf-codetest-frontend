@@ -64,30 +64,31 @@ body {
   color: white;
   top: 30%;
   width: 100%;
-}
+  
+  .center {
+    text-align: center
+  }
+  .left {
+    text-align: left;
+  }
+  .right {
+    text-align: right;
+  }
 
-.center {
-  text-align: center
+  .title {
+    font-size: 60px;
+    text-transform: uppercase;
+  }
+  
+  .subtitle {
+    font-size: 22px;
+  }
+  
 }
-.left {
-  text-align: left;
-}
-.right {
-  text-align: right;
-}
-
-.title {
-  font-size: 60px;
-  text-transform: uppercase;
-}
-
 .active {
   opacity: 0.5;
 }
 
-.subtitle {
-  font-size: 22px;
-}
 
 #indicatorWrapper {
   width: 100%;

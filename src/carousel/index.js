@@ -137,9 +137,9 @@ class Carousel extends Component {
   }
 
   // Helper function for running both above methods
-  restartTimers = () => {
-    this.clearTimers();
-    this.timer();
+  restartTimers = async () => {
+    await this.clearTimers();
+    await this.timer();
   }
 
   // Checks `paused` flag and sets timers accordingly
