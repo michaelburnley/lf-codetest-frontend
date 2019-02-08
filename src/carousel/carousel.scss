@@ -52,13 +52,33 @@ body {
   position: relative;
 }
 
+.button {
+  border: 1px solid white;
+  display: inline-block;
+  padding: 1%;
+  margin: 2%;
+}
+
 .text-blocks {
   position: absolute;
   color: white;
+  top: 30%;
+  width: 100%;
+}
+
+.center {
+  text-align: center
+}
+.left {
+  text-align: left;
+}
+.right {
+  text-align: right;
 }
 
 .title {
-  font-size: 50px;
+  font-size: 60px;
+  text-transform: uppercase;
 }
 
 .active {
@@ -66,7 +86,7 @@ body {
 }
 
 .subtitle {
-  font-size: 35px;
+  font-size: 22px;
 }
 
 #indicatorWrapper {

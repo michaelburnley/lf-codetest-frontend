@@ -3,7 +3,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleRight, faAngleLeft } from '@fortawesome/free-solid-svg-icons';
 import './carousel.scss';
 
-
 // Stateless Components
 
 // Slide
@@ -15,6 +14,9 @@ const Slide = ({ data, pauseSlides, translate }) => {
   return (
     <div onMouseOver={pauseSlides} onMouseLeave={pauseSlides} className="slide" style={styles}>
       <TextBlocks data={data}/>
+      {
+        data.button.forEach(btn => <FancyButton text={btn} />)
+      }
       <img src={data.image} alt={data.title}/>
     </div>
   )
@@ -26,11 +28,18 @@ const Timer = ({ timeLeft }) => (
   <div>Time to Slide Change: {timeLeft / 1000}s</div>
 )
 
+const FancyButton = ({ text }) => (
+  <div className={"button "}>{text}</div>
+);
+
 // TextBlocks
 // Renders text that sits within the Slide component
-const TextBlocks = ({ data: { title, subtitle }}) => (
-    <div className="text-blocks">
+const TextBlocks = ({ data: { title, subtitle, button, classes }}) => (
+    <div className={"text-blocks " + classes}>
       <div className="title">{title}</div>
+      {
+        button
+      }
       <div className="subtitle">{subtitle}</div>
     </div>
   )
@@ -69,22 +78,35 @@ class Carousel extends Component {
       interval: 5000, // time between slides
       timeLeft: 5000, // countdown timer
       paused: false,  // flag for hover-over pause
-      translate: 100,   // movement in percentage for slides 
+      translate: 0,   // movement in percentage for slides 
       images: [
         {
-          image: "/slide1.jpg",
-          title: "First Slide",
-          subtitle: "I am a sentence below the title.",
+          image: "/slide1.png",
+          classes: "center",
+          title: "Spring 2019",
+          subtitle: "Sed ut perspiciatis unde omnis iste natus error sit voluptatem.",
+          button: [
+              <FancyButton text="Shop Womens" />,
+              <FancyButton text="Shop Mens" />,
+          ]
         },
         {
-          image: "/slide2.jpg",
-          title: "Second Slide",
-          subtitle: "I am a sentence below the title.",
+          image: "/slide2.png",
+          classes: "left",
+          title: "Back in Black",
+          subtitle: "Sed ut perspiciatis unde omnis iste natus error sit voluptatem.",
+          button: [
+              <FancyButton text="Shop The Collection" />,
+          ]
         },
         {
-          image: "/slide3.jpg",
-          title: "Third Slide",
-          subtitle: "I am a sentence below the title.",
+          image: "/slide3.png",
+          classes: "right",
+          title: "The New \"it\" Bag",
+          subtitle: "Sed ut perspiciatis unde omnis iste natus error sit voluptatem.",
+          button: [
+              <FancyButton text="Shop Handbags" />,
+          ]
         },
       ] // image data array
     };
@@ -100,7 +122,7 @@ class Carousel extends Component {
   timer = () => {
     this.sliderInterval = setInterval(() => {
       this.nextSlide();
-      // this.setState({ translate: -100 })
+      this.setState({ translate: -100 })
     }, this.state.interval);
     this.countdown = setInterval(() => {
       this.setState({ timeLeft: this.state.timeLeft - 1000})
@@ -140,10 +162,10 @@ class Carousel extends Component {
     let state = {
       slide: this.state.slide + 1,
       images: images,
-      translate: this.state.translate
+      translate: ''
     };
-
-    // state.slide === 0 ? state.translate = -100 : state.translate = this.state.translate * this.state.slide;
+    
+    state.slide === 0 ? state.translate = 100 : state.translate = this.state.translate * this.state.slide;
     state.slide < images.length ? console.log("test") : state.slide = 0; 
 
     this.setState(state);
@@ -157,9 +179,9 @@ class Carousel extends Component {
     let state = {
       slide: this.state.slide - 1,
       images: images,
-      // translate: 100
+      translate: ''
     }
-    state.slide < 0 ? state.slide = state.images.length -1 : console.log("test");
+    state.slide < 0 ? state.slide = state.images.length -1 : state.translate = this.state.translate * this.state.slide;
     this.setState(state);
   }
 
