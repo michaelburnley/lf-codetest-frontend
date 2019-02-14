@@ -131,10 +131,6 @@ class Carousel extends Component {
     this.timer();
   }
 
-  changeDirection = () => {
-    this.setState({ direction: "left" });
-  }
-
   // Attaches two interval timers to `this` keyword
   timer = () => {
     this.sliderInterval = setInterval(() => {
@@ -180,7 +176,7 @@ class Carousel extends Component {
       images: images,
       direction: "left"
     };
-    state.slide > this.state.images.length ? state.slide = 1 : console.log("still moving");
+    state.slide > this.state.images.length && (state.slide = 1);
     this.setState(state);
     this.restartTimers();
   }
@@ -194,18 +190,15 @@ class Carousel extends Component {
       images: images,
       direction: "right"
     };
-    state.slide < 0 ? state.slide = 3 : console.log("moving back");
+    state.slide < 0 && (state.slide = 3);
     this.setState(state);
     this.restartTimers();
   }
 
   // Simple slide translation calculation for SlideIndicator
   goToSlide = (slideNumber) => {
-    console.log(this.state.images)
     let first_slide = this.state.images.slice(slideNumber, -1);
-    console.log(first_slide)
     let images = [...first_slide, ...this.state.images];
-    console.log(images)
     let state = { 
       slide: slideNumber + 1,
       images: images 
@@ -237,7 +230,6 @@ class Carousel extends Component {
            this.state.images.map((data, i) => (
             <Slide 
               data={data}
-              changeDirection={this.changeDirection}
               key={i}
               pauseSlides={this.pauseSlides}
               direction={this.state.direction} />
