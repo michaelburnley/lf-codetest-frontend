@@ -1,24 +1,37 @@
 import React, { Component } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleRight, faAngleLeft } from '@fortawesome/free-solid-svg-icons';
+import {
+  CSSTransition,
+  TransitionGroup,
+} from 'react-transition-group';
 import './carousel.scss';
 
 // Stateless Components
 
 // Slide
 // Handles slide movement and renders textblocks/images
-const Slide = ({ data, pauseSlides, translate }) => {  
-  const styles = { 
-    left: `-${translate}%`
-  };
+
+const Slide = ({ data, pauseSlides, direction }) => {  
   return (
-    <div onMouseOver={pauseSlides} onMouseLeave={pauseSlides} className="slide" style={styles}>
-      <TextBlocks data={data}/>
-      {
-        data.button.forEach(btn => <FancyButton text={btn} />)
-      }
-      <img src={data.image} alt={data.title}/>
-    </div>
+    <TransitionGroup
+      className="slide"
+      childFactory={child => React.cloneElement(child, { classNames: "slide-" + direction + " slider" })} >
+    <CSSTransition
+      timeout={1000}
+      key={data.image}
+      >
+      <div
+        onMouseOver={pauseSlides}
+        onMouseLeave={pauseSlides}>
+        <TextBlocks data={data}/>
+        {
+          data.button.forEach(btn => <FancyButton text={btn} />)
+        }
+        <img src={data.image} alt={data.title}/>
+      </div>
+    </CSSTransition>
+    </TransitionGroup>
   )
 }
 
@@ -74,11 +87,11 @@ class Carousel extends Component {
   constructor() {
     super();
     this.state = {
-      slide: 0,       // current slide
+      slide: 1,       // current slide
       interval: 5000, // time between slides
       timeLeft: 5000, // countdown timer
       paused: false,  // flag for hover-over pause
-      translate: 0,   // movement in percentage for slides 
+      direction: "left",
       images: [
         {
           image: "/slide1.png",
@@ -118,11 +131,14 @@ class Carousel extends Component {
     this.timer();
   }
 
+  changeDirection = () => {
+    this.setState({ direction: "left" });
+  }
+
   // Attaches two interval timers to `this` keyword
   timer = () => {
     this.sliderInterval = setInterval(() => {
       this.nextSlide();
-      this.setState({ translate: -100 })
     }, this.state.interval);
     this.countdown = setInterval(() => {
       this.setState({ timeLeft: this.state.timeLeft - 1000})
@@ -132,14 +148,15 @@ class Carousel extends Component {
   // Removes timers and resets `timeLeft` variable
   clearTimers = () => {
     this.setState({ timeLeft: this.state.interval });
-    clearInterval(this.sliderInterval);
     clearInterval(this.countdown);
+    clearInterval(this.sliderInterval);
   }
 
   // Helper function for running both above methods
   restartTimers = async () => {
     await this.clearTimers();
     await this.timer();
+    // this.setState({ direction: "left"})
   }
 
   // Checks `paused` flag and sets timers accordingly
@@ -156,46 +173,49 @@ class Carousel extends Component {
   // Resets timers and performs necessary `Slide` calculations
   // Local state used to limit `setState` calls
   nextSlide = () => {
-    this.restartTimers();
     let [first, ...rest] = this.state.images;
     let images = [...rest, first];
     let state = {
       slide: this.state.slide + 1,
       images: images,
-      translate: ''
+      direction: "left"
     };
-    
-    state.slide === 0 ? state.translate = 100 : state.translate = this.state.translate * this.state.slide;
-    state.slide < images.length ? console.log("test") : state.slide = 0; 
-
+    state.slide > this.state.images.length ? state.slide = 1 : console.log("still moving");
     this.setState(state);
+    this.restartTimers();
   }
 
   prevSlide = () => {
-    this.restartTimers();
     let last = this.state.images.slice(-1);
     let rest = this.state.images.slice(0, -1);
     let images = [...last, ...rest];
     let state = {
       slide: this.state.slide - 1,
       images: images,
-      translate: ''
-    }
-    state.slide < 0 ? state.slide = state.images.length -1 : state.translate = this.state.translate * this.state.slide;
+      direction: "right"
+    };
+    state.slide < 0 ? state.slide = 3 : console.log("moving back");
     this.setState(state);
+    this.restartTimers();
   }
 
   // Simple slide translation calculation for SlideIndicator
   goToSlide = (slideNumber) => {
-    this.restartTimers();
+    console.log(this.state.images)
+    let first_slide = this.state.images.slice(slideNumber, -1);
+    console.log(first_slide)
+    let images = [...first_slide, ...this.state.images];
+    console.log(images)
     let state = { 
-      slide: slideNumber,
-      translate: slideNumber * 100 
+      slide: slideNumber + 1,
+      images: images 
     }
     this.setState(state);
+    this.restartTimers();
   }
 
   render() {
+    
     return(
       <div className="wrapper">
         <Timer 
@@ -213,23 +233,24 @@ class Carousel extends Component {
         <div id="slideWrapper" style={{
           display: 'inline-flex'
         }}>
-          {
-            this.state.images.map((data, i) => (
-              <Slide 
-                data={data}
-                pauseSlides={this.pauseSlides}
-                translate={this.state.translate}
-                key={i} />
-            ))
-          }
+         {
+           this.state.images.map((data, i) => (
+            <Slide 
+              data={data}
+              changeDirection={this.changeDirection}
+              key={i}
+              pauseSlides={this.pauseSlides}
+              direction={this.state.direction} />
+          ))
+         }
         </div>
         <div id="indicatorWrapper">
           {
             this.original_arr.map((data, i) => (
               <SlideIndicator
-                classes={ this.state.slide === i ? "indicator active" : "indicator" } 
+                classes={ this.state.slide === i + 1 ? "indicator active" : "indicator" } 
                 data={data}
-                key={i}
+                key={i + 1}
                 onClick={e => this.goToSlide(i)} />
             ))
           }
