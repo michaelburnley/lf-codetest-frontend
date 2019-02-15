@@ -37,7 +37,7 @@ const Slide = ({ data, pauseSlides, direction, slide }) => {
         onMouseLeave={pauseSlides}>
         <TextBlocks data={data}/>
         {
-          data.button.forEach(btn => <FancyButton text={btn} />)
+          data.button.forEach((btn, i) => <FancyButton key={i} text={btn} />)
         }
         <img style={style} className={"slide-" + slide} src={data.image} alt={data.title}/>
       </div>
@@ -111,8 +111,8 @@ class Carousel extends Component {
           title: "Spring 2019",
           subtitle: "Sed ut perspiciatis unde omnis iste natus error sit voluptatem.",
           button: [
-              <FancyButton text="Shop Womens" />,
-              <FancyButton text="Shop Mens" />,
+              <FancyButton key="0" text="Shop Womens" />,
+              <FancyButton key="1" text="Shop Mens" />,
           ]
         },
         {
@@ -122,7 +122,7 @@ class Carousel extends Component {
           title: "Back in Black",
           subtitle: "Sed ut perspiciatis unde omnis iste natus error sit voluptatem.",
           button: [
-              <FancyButton text="Shop The Collection" />,
+              <FancyButton key="0" text="Shop The Collection" />,
           ]
         },
         {
@@ -132,7 +132,7 @@ class Carousel extends Component {
           title: "The New \"it\" Bag",
           subtitle: "Sed ut perspiciatis unde omnis iste natus error sit voluptatem.",
           button: [
-              <FancyButton text="Shop Handbags" />,
+              <FancyButton key="0" text="Shop Handbags" />,
           ]
         },
       ] // image data array
@@ -165,7 +165,7 @@ class Carousel extends Component {
   // Helper function for running both above methods
   restartTimers = async () => {
     await this.clearTimers();
-    await this.timer();
+    this.timer();
     // this.setState({ direction: "left"})
   }
 
