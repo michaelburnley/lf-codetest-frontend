@@ -37,11 +37,6 @@ body {
 
 }
 
-// .slider-appear {
-//   transform: translateX(0);
-//   transition: transform 500ms ease-in-out;
-// }
-
 .slider-enter {
   position: absolute;
   .slide-right {
@@ -56,7 +51,7 @@ body {
   display: inline-block;
   .slide-left, .slide-right {
     transform: translateX(0);
-    transition: transform 500ms ease-in-out;
+    transition: transform 500ms ease-in-out 500ms;
   }
 }
 
@@ -167,8 +162,73 @@ body {
 @media only screen 
   and (min-device-width: 300px) 
   and (max-device-width: 812px) { 
-    .slide img {
-      width: 100%;
-      min-width: initial;
+    .slide {
+      img {
+        display: block;
+        width: 100%;
+        box-sizing: border-box;
+        padding-left: 375px;
+        height: 500px;
+        min-width: initial;
+        flex: initial;
+        flex-wrap: initial;
+        // &.slide-1 {
+        //   background: rgba(0,0,0,0) url('/slide1.jpg');
+        //   background-position: -82px;
+        //   background-size: cover;
+        // }
+        // &.slide-2 {
+        //   background: rgba(0,0,0,0) url('/slide2.jpg');
+        //   background-position: -425px;
+        //   background-size: cover;
+        // }
+        // &.slide-3 {
+        //   background: rgba(0,0,0,0) url('/slide3.jpg');
+        //   background-position: -150px;
+        //   background-size: cover;
+        // }
+      }
+      .slider-enter-active, .slider-exit {
+        .slide-left, .slide-right {
+          transform: translateX(0);
+          transition: transform 500ms ease-in-out 500ms;
+        }
+      }
+    
+      .slider-exit-active.slide-left {
+        transform: translateX(-100%);
+        transition: transform 500ms ease-in-out;
+      }
+      .slider-exit-active.slide-right {
+        transform: translateX(100%);
+        transition: transform 500ms ease-in-out;
+      }
     }
+
+
+    .text-blocks {
+      bottom: 0;
+      position: absolute;
+      text-align: center;
+    }
+
+    .title {
+      font-size: 30px;
+      margin-bottom: 20%;
+    }
+
+    #navigation {
+      top: 35%;
+      color: white;
+    }
+
+    .button {
+      width: 75%;
+      margin: 1% 10% 0% 10%;
+    }
+
+    .subtitle {
+      margin-top: 10%;
+    }
+
   }

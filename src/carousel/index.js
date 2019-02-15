@@ -12,13 +12,24 @@ import './carousel.scss';
 // Slide
 // Handles slide movement and renders textblocks/images
 
-const Slide = ({ data, pauseSlides, direction }) => {  
+const Slide = ({ data, pauseSlides, direction, slide, changeDirection }) => {  
+  let style = {
+    background: `url(${data.image})`,
+    backgroundPosition: `${data.bp}`,
+    backgroundSize: 'cover',
+  }
   return (
     <TransitionGroup
       className="slide"
       childFactory={child => React.cloneElement(child, { classNames: "slide-" + direction + " slider" })} >
     <CSSTransition
-      timeout={1000}
+      timeout={{
+        enter: 500,
+        exit: 500
+      }}
+      onEntered={(el) => {
+        el.setAttribute("class", "slide-left slider");
+      }}
       key={data.image}
       >
       <div
@@ -28,7 +39,7 @@ const Slide = ({ data, pauseSlides, direction }) => {
         {
           data.button.forEach(btn => <FancyButton text={btn} />)
         }
-        <img src={data.image} alt={data.title}/>
+        <img style={style} className={"slide-" + slide} src={data.image} alt={data.title}/>
       </div>
     </CSSTransition>
     </TransitionGroup>
@@ -94,7 +105,8 @@ class Carousel extends Component {
       direction: "left",
       images: [
         {
-          image: "/slide1.png",
+          image: "/slide1.jpg",
+          bp: '-82px',
           classes: "center",
           title: "Spring 2019",
           subtitle: "Sed ut perspiciatis unde omnis iste natus error sit voluptatem.",
@@ -104,7 +116,8 @@ class Carousel extends Component {
           ]
         },
         {
-          image: "/slide2.png",
+          image: "/slide2.jpg",
+          bp: '-425px',
           classes: "left",
           title: "Back in Black",
           subtitle: "Sed ut perspiciatis unde omnis iste natus error sit voluptatem.",
@@ -113,7 +126,8 @@ class Carousel extends Component {
           ]
         },
         {
-          image: "/slide3.png",
+          image: "/slide3.jpg",
+          bp: '-150px',
           classes: "right",
           title: "The New \"it\" Bag",
           subtitle: "Sed ut perspiciatis unde omnis iste natus error sit voluptatem.",
@@ -197,8 +211,10 @@ class Carousel extends Component {
 
   // Simple slide translation calculation for SlideIndicator
   goToSlide = (slideNumber) => {
-    let first_slide = this.state.images.slice(slideNumber, -1);
-    let images = [...first_slide, ...this.state.images];
+    let arr = this.state.images;
+    let before = arr.splice(0, slideNumber);
+    let images = [...arr, ...before];
+
     let state = { 
       slide: slideNumber + 1,
       images: images 
@@ -231,6 +247,7 @@ class Carousel extends Component {
             <Slide 
               data={data}
               key={i}
+              slide={this.state.slide}
               pauseSlides={this.pauseSlides}
               direction={this.state.direction} />
           ))
