@@ -12,7 +12,7 @@ import './carousel.scss';
 // Slide
 // Handles slide movement and renders textblocks/images
 
-const Slide = ({ data, pauseSlides, direction, slide, changeDirection }) => {  
+const Slide = ({ data, pauseSlides, direction, slide }) => {  
   let style = {
     background: `url(${data.image})`,
     backgroundPosition: `${data.bp}`,
