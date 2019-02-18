@@ -191,6 +191,7 @@ class Carousel extends Component {
       direction: "left"
     };
     state.slide > this.state.images.length && (state.slide = 1);
+    console.log("issue with state?", state)
     this.setState(state);
     this.restartTimers();
   }
@@ -239,9 +240,7 @@ class Carousel extends Component {
             text="next"
             icon={faAngleRight} />
         </div>
-        <div id="slideWrapper" style={{
-          display: 'inline-flex'
-        }}>
+        <div id="slideWrapper">
          {
            this.state.images.map((data, i) => (
             <Slide 

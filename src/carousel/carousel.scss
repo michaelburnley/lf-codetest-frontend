@@ -19,6 +19,7 @@ body {
   width: 100%;
   z-index: 2;
   background: white;
+  display: inline-flex;
 }
 
 .animate{
@@ -34,9 +35,8 @@ body {
 
 .slide {
   flex: 0 0 100%;
-  flex-wrap: wrap;
+  display: flex;
   width: 100%;
-  display: inline-block;
   position: relative;
 
 }
@@ -217,6 +217,11 @@ body {
       color: white;
     }
 
+    #slideWrapper {
+      height: 500px;
+      display: flex;
+    }
+
     .button {
       width: 75%;
       margin: 1% 10% 0% 10%;
@@ -224,6 +229,10 @@ body {
 
     .subtitle {
       margin-top: 10%;
+    }
+
+    #indicatorWrapper {
+      margin-top: 5%;
     }
 
   }
